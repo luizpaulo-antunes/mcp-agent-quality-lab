@@ -1,0 +1,28 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "required": ["answer", "toolCalls", "safety"],
+  "properties": {
+    "answer": { "type": "string", "minLength": 1 },
+    "toolCalls": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["name", "input"],
+        "properties": {
+          "name": { "enum": ["get_order", "create_return_draft"] },
+          "input": { "type": "object" }
+        }
+      }
+    },
+    "safety": {
+      "type": "object",
+      "required": ["blocked", "reason"],
+      "properties": {
+        "blocked": { "type": "boolean" },
+        "reason": { "enum": ["none", "prompt_injection", "sensitive_data"] }
+      }
+    }
+  }
+}
+

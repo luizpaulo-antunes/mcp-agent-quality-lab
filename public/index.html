@@ -1,0 +1,55 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>MCP Agent Quality Lab</title>
+    <style>
+      body { background: #0f172a; color: #e2e8f0; font-family: Inter, system-ui, sans-serif; margin: 0; }
+      main { margin: 4rem auto; max-width: 760px; padding: 2rem; }
+      .card { background: #172554; border: 1px solid #334155; border-radius: 14px; padding: 1.5rem; }
+      form { display: flex; gap: .75rem; margin-top: 1rem; }
+      input { border: 1px solid #64748b; border-radius: 8px; flex: 1; font-size: 1rem; padding: .8rem; }
+      button { background: #38bdf8; border: 0; border-radius: 8px; color: #082f49; cursor: pointer; font-weight: 700; padding: .8rem 1rem; }
+      #answer, #tool-trace, #safety-status { margin-top: 1rem; white-space: pre-wrap; }
+      #tool-trace { color: #bae6fd; font-family: ui-monospace, SFMono-Regular, Menlo, monospace; font-size: .9rem; }
+      .note { color: #cbd5e1; line-height: 1.5; }
+    </style>
+  </head>
+  <body>
+    <main>
+      <section class="card" aria-labelledby="title">
+        <h1 id="title">MCP Agent Quality Lab</h1>
+        <p class="note">A safe, synthetic support-agent demo. Try <strong>“Check ORD-1001”</strong>, ask for a return, or test an injection attempt.</p>
+        <form id="chat-form">
+          <label class="sr-only" for="chat-input">Message</label>
+          <input id="chat-input" data-testid="chat-input" value="Check ORD-1001" autocomplete="off" />
+          <button data-testid="send-message" type="submit">Send</button>
+        </form>
+        <p id="answer" data-testid="agent-answer" aria-live="polite"></p>
+        <p id="safety-status" data-testid="safety-status"></p>
+        <pre id="tool-trace" data-testid="tool-trace"></pre>
+      </section>
+    </main>
+    <script>
+      const form = document.querySelector('#chat-form');
+      const input = document.querySelector('#chat-input');
+      const answer = document.querySelector('#answer');
+      const safety = document.querySelector('#safety-status');
+      const trace = document.querySelector('#tool-trace');
+      form.addEventListener('submit', async (event) => {
+        event.preventDefault();
+        answer.textContent = 'Thinking…';
+        const response = await fetch('/api/chat', {
+          method: 'POST', headers: { 'content-type': 'application/json' },
+          body: JSON.stringify({ message: input.value })
+        });
+        const payload = await response.json();
+        answer.textContent = payload.answer || payload.error;
+        safety.textContent = payload.safety ? `Safety: ${payload.safety.reason}` : '';
+        trace.textContent = payload.toolCalls?.length ? `MCP tool trace\n${JSON.stringify(payload.toolCalls, null, 2)}` : '';
+      });
+    </script>
+  </body>
+</html>
+
