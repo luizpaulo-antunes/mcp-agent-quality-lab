@@ -80,17 +80,7 @@ The script starts the local MCP server as a child process, discovers its tools, 
 
 Run `npm test` to execute type-checking and all four test layers.
 
-## Sanitization checklist before publishing
 
-- Keep all data fictional and generic; do not use screenshots, names, prompts, URLs, IDs, incidents, or metrics from any private project.
-- Keep `.env`, test reports, and local trace files out of Git.
-- Do not claim the deterministic demo is a production LLM evaluation framework.
-- Replace this README's generic examples only with artifacts that you are authorized to publish.
-- Before publishing, inspect the complete diff and run a repository secret scan. Expected matches for environment-variable names and documentation examples should be reviewed manually.
-
-## Suggested LinkedIn description
-
-> Built a public TypeScript lab for quality engineering of MCP-enabled AI agents: Playwright API/E2E coverage, AJV contract checks, versioned JSONL behavior evals, tool-trace assertions, and prompt-injection/PII safety cases — all with synthetic data and no credentials.
 
 ## References
 
