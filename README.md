@@ -1,3 +1,14 @@
+<p align="center">
+  <img src="./docs/assets/project-banner.svg" alt="MCP Agent Quality Lab" width="100%" />
+</p>
+
+<p align="center">
+  <img src="https://img.shields.io/badge/TypeScript-3178C6?style=flat-square&logo=typescript&logoColor=white" alt="TypeScript" />
+  <img src="https://img.shields.io/badge/Playwright-2EAD33?style=flat-square&logo=playwright&logoColor=white" alt="Playwright" />
+  <img src="https://img.shields.io/badge/MCP-Agent_Tools-8B5CF6?style=flat-square" alt="MCP agent tools" />
+  <img src="https://img.shields.io/badge/Quality-API_|_E2E_|_Evals-0EA5E9?style=flat-square" alt="API E2E and evaluation testing" />
+</p>
+
 # MCP Agent Quality Lab
 
 A public, sanitized TypeScript lab for quality engineering of an AI support agent that uses MCP tools. It uses fictional orders, synthetic customer labels, no production data, and no credentials.
