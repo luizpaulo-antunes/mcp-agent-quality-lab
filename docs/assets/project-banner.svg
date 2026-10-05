@@ -1,0 +1,23 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1280" height="480" viewBox="0 0 1280 480" role="img" aria-labelledby="title desc">
+  <title id="title">MCP Agent Quality Lab</title>
+  <desc id="desc">Professional blue project banner showing layered browser, API, contract and evaluation testing around an MCP agent.</desc>
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#08111f"/><stop offset="1" stop-color="#172554"/></linearGradient>
+    <linearGradient id="a" x1="0" x2="1"><stop stop-color="#38bdf8"/><stop offset="1" stop-color="#8b5cf6"/></linearGradient>
+  </defs>
+  <rect width="1280" height="480" rx="28" fill="url(#bg)"/>
+  <circle cx="1160" cy="30" r="260" fill="#2563eb" opacity=".10"/><circle cx="1030" cy="500" r="280" fill="#8b5cf6" opacity=".07"/>
+  <rect x="70" y="74" width="8" height="300" rx="4" fill="url(#a)"/>
+  <text x="112" y="178" fill="#f8fafc" font-family="Inter,Segoe UI,Arial,sans-serif" font-size="58" font-weight="700">MCP Agent Quality Lab</text>
+  <text x="114" y="249" fill="#bae6fd" font-family="Inter,Segoe UI,Arial,sans-serif" font-size="24">Layered evidence for AI-agent behavior and tool use</text>
+  <text x="114" y="307" fill="#cbd5e1" font-family="Inter,Segoe UI,Arial,sans-serif" font-size="21">API · Contract · E2E · Behavioral evals · Safety</text>
+  <text x="114" y="358" fill="#c4b5fd" font-family="Inter,Segoe UI,Arial,sans-serif" font-size="18" letter-spacing="1.3">PLAYWRIGHT  ·  TYPESCRIPT  ·  MCP  ·  AJV</text>
+  <g transform="translate(850 96)" font-family="Inter,Segoe UI,Arial,sans-serif" text-anchor="middle">
+    <circle cx="170" cy="130" r="68" fill="#172554" stroke="#60a5fa" stroke-width="3"/><text x="170" y="136" fill="#dbeafe" font-size="19" font-weight="700">AI AGENT</text>
+    <circle cx="35" cy="45" r="42" fill="#0c2a3b" stroke="#38bdf8" stroke-width="2"/><text x="35" y="51" fill="#e0f2fe" font-size="14" font-weight="700">API</text>
+    <circle cx="305" cy="45" r="42" fill="#1e1b4b" stroke="#8b5cf6" stroke-width="2"/><text x="305" y="51" fill="#ede9fe" font-size="14" font-weight="700">E2E</text>
+    <circle cx="35" cy="245" r="42" fill="#102a27" stroke="#34d399" stroke-width="2"/><text x="35" y="251" fill="#d1fae5" font-size="14" font-weight="700">EVALS</text>
+    <circle cx="305" cy="245" r="42" fill="#2e1065" stroke="#a78bfa" stroke-width="2"/><text x="305" y="251" fill="#f3e8ff" font-size="14" font-weight="700">TOOLS</text>
+    <path d="M70 68l44 28M270 68l-44 28M70 222l44-58M270 222l-44-58" stroke="url(#a)" stroke-width="3" stroke-linecap="round"/>
+  </g>
+</svg>
