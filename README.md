@@ -3,6 +3,7 @@
 </p>
 
 <p align="center">
+  <a href="https://github.com/luizpaulo-antunes/mcp-agent-quality-lab/actions/workflows/ci.yml"><img src="https://github.com/luizpaulo-antunes/mcp-agent-quality-lab/actions/workflows/ci.yml/badge.svg" alt="CI status" /></a>
   <img src="https://img.shields.io/badge/TypeScript-3178C6?style=flat-square&logo=typescript&logoColor=white" alt="TypeScript" />
   <img src="https://img.shields.io/badge/Playwright-2EAD33?style=flat-square&logo=playwright&logoColor=white" alt="Playwright" />
   <img src="https://img.shields.io/badge/MCP-Agent_Tools-8B5CF6?style=flat-square" alt="MCP agent tools" />
@@ -88,11 +89,30 @@ The script starts the local MCP server as a child process, discovers its tools, 
 | Eval | `npm run test:eval` | golden behavior and safety regression |
 | MCP integration | `npm run test:mcp` | real stdio discovery, tool execution, human-approval metadata, input validation, and unknown-order errors |
 | API | `npm run test:api` | API behavior and AJV response contract |
-| E2E | `npm run test:e2e` | browser journey, visible answer, and deterministic tool-call trace |
+| E2E | `npm run test:e2e` | Chromium browser journey, visible answer, and deterministic tool-call trace |
+| Cross-browser E2E | `npm run test:e2e:all` | the same journeys in Chromium, Firefox, and WebKit |
 
 Run `npm test` to execute type-checking and all five test layers.
 
 The web demo intentionally calls the shared tool implementation directly to keep its deterministic test path lightweight. Its visible tool-call trace is application metadata, not MCP transport traffic. The MCP integration suite separately starts the stdio server and verifies discovery and execution through the protocol.
+
+## CI reliability policy
+
+The GitHub Actions pipeline separates deterministic quality gates from browser-specific E2E execution:
+
+- **Quality:** TypeScript, unit, deterministic eval, MCP protocol integration, and API contract tests.
+- **Browser matrix:** the E2E suite runs independently in Chromium, Firefox, and WebKit.
+- **Flaky-test handling:** CI retries a failed Playwright test once to collect a trace, but `failOnFlakyTests` keeps a retry-pass from being reported as healthy.
+- **Evidence:** every CI run retains HTML and JUnit reports for 14 days. Failures also retain traces, screenshots, and videos when generated.
+
+To run the complete browser matrix locally:
+
+```bash
+npx playwright install chromium firefox webkit
+npm run test:e2e:all
+```
+
+Open the latest HTML report with `npx playwright show-report`.
 
 ## References
 

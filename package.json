@@ -16,8 +16,9 @@
     "test:unit": "vitest run tests/unit",
     "test:eval": "vitest run tests/evals",
     "test:mcp": "vitest run tests/integration",
-    "test:api": "playwright test tests/api",
-    "test:e2e": "playwright test tests/e2e",
+    "test:api": "playwright test --project=api",
+    "test:e2e": "playwright test --project=chromium",
+    "test:e2e:all": "playwright test --project=chromium --project=firefox --project=webkit",
     "test": "npm run check && npm run test:unit && npm run test:eval && npm run test:mcp && npm run test:api && npm run test:e2e"
   },
   "dependencies": {
