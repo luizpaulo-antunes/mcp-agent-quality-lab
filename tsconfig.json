@@ -9,6 +9,5 @@
     "resolveJsonModule": true,
     "types": ["node", "vitest/globals"]
   },
-  "include": ["src", "tests", "playwright.config.ts"]
+  "include": ["src", "tests", "evals/**/*.ts", "playwright.config.ts"]
 }
-

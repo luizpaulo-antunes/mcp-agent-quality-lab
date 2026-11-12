@@ -34,6 +34,7 @@ jobs:
         with:
           name: quality-reports-${{ github.run_attempt }}
           path: |
+            eval-results/
             playwright-report/
             test-results/
           if-no-files-found: error
