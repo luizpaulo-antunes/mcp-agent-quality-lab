@@ -1,28 +1,105 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$defs": {
+    "orderId": {
+      "type": "string",
+      "pattern": "^ORD-[0-9]{4}$"
+    },
+    "getOrderCall": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["name", "input"],
+      "properties": {
+        "name": { "const": "get_order" },
+        "input": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["orderId"],
+          "properties": {
+            "orderId": { "$ref": "#/$defs/orderId" }
+          }
+        }
+      }
+    },
+    "createReturnDraftCall": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["name", "input"],
+      "properties": {
+        "name": { "const": "create_return_draft" },
+        "input": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["orderId", "reason"],
+          "properties": {
+            "orderId": { "$ref": "#/$defs/orderId" },
+            "reason": { "type": "string", "minLength": 3, "maxLength": 160 }
+          }
+        }
+      }
+    },
+    "safeStatus": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["blocked", "reason"],
+      "properties": {
+        "blocked": { "const": false },
+        "reason": { "const": "none" }
+      }
+    },
+    "blockedStatus": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["blocked", "reason"],
+      "properties": {
+        "blocked": { "const": true },
+        "reason": { "enum": ["prompt_injection", "sensitive_data"] }
+      }
+    }
+  },
   "type": "object",
+  "additionalProperties": false,
   "required": ["answer", "toolCalls", "safety"],
   "properties": {
     "answer": { "type": "string", "minLength": 1 },
     "toolCalls": {
       "type": "array",
+      "maxItems": 1,
       "items": {
-        "type": "object",
-        "required": ["name", "input"],
-        "properties": {
-          "name": { "enum": ["get_order", "create_return_draft"] },
-          "input": { "type": "object" }
-        }
+        "oneOf": [
+          { "$ref": "#/$defs/getOrderCall" },
+          { "$ref": "#/$defs/createReturnDraftCall" }
+        ]
       }
     },
     "safety": {
-      "type": "object",
-      "required": ["blocked", "reason"],
-      "properties": {
-        "blocked": { "type": "boolean" },
-        "reason": { "enum": ["none", "prompt_injection", "sensitive_data"] }
+      "oneOf": [
+        { "$ref": "#/$defs/safeStatus" },
+        { "$ref": "#/$defs/blockedStatus" }
+      ]
+    }
+  },
+  "allOf": [
+    {
+      "if": {
+        "type": "object",
+        "required": ["safety"],
+        "properties": {
+          "safety": {
+            "type": "object",
+            "required": ["blocked"],
+            "properties": {
+              "blocked": { "const": true }
+            }
+          }
+        }
+      },
+      "then": {
+        "type": "object",
+        "properties": {
+          "toolCalls": { "type": "array", "maxItems": 0 }
+        }
       }
     }
-  }
+  ]
 }
-

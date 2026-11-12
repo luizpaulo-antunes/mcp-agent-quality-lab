@@ -96,6 +96,18 @@ Run `npm test` to execute type-checking and all five test layers.
 
 The web demo intentionally calls the shared tool implementation directly to keep its deterministic test path lightweight. Its visible tool-call trace is application metadata, not MCP transport traffic. The MCP integration suite separately starts the stdio server and verifies discovery and execution through the protocol.
 
+## API contract guarantees
+
+The HTTP response contract in `contracts/chat-response.schema.json` uses JSON Schema 2020-12 and discriminated tool-call variants. It enforces:
+
+- exact inputs for `get_order` and `create_return_draft`;
+- the synthetic `ORD-####` identifier format;
+- no unknown properties at the response, tool-call, input, or safety levels;
+- coherent safety pairs: `blocked: false` requires `reason: none`, while blocked responses require a safety reason;
+- at most one tool call, and no tool calls after a response is blocked.
+
+Playwright API tests validate accepted variants, a negative contract matrix, and live responses across lookup, return-draft, guidance, and blocked behavior branches.
+
 ## Deterministic eval evidence
 
 The versioned golden set measures four regression dimensions:
