@@ -47,9 +47,8 @@
         const payload = await response.json();
         answer.textContent = payload.answer || payload.error;
         safety.textContent = payload.safety ? `Safety: ${payload.safety.reason}` : '';
-        trace.textContent = payload.toolCalls?.length ? `MCP tool trace\n${JSON.stringify(payload.toolCalls, null, 2)}` : '';
+        trace.textContent = payload.toolCalls?.length ? `Tool-call trace\n${JSON.stringify(payload.toolCalls, null, 2)}` : '';
       });
     </script>
   </body>
 </html>
-

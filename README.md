@@ -11,7 +11,7 @@
 
 # MCP Agent Quality Lab
 
-A public, sanitized TypeScript lab for quality engineering of an AI support agent that uses MCP tools. It uses fictional orders, synthetic customer labels, no production data, and no credentials.
+A public, sanitized TypeScript lab for quality engineering across a deterministic AI support agent and an MCP server that exposes the same tool implementation. It uses fictional orders, synthetic customer labels, no production data, and no credentials.
 
 The default web demo uses a deterministic agent so its API, browser, and evaluation tests are repeatable and free. An optional Claude script connects to the same MCP server through the official MCP and Anthropic TypeScript SDKs.
 
@@ -21,10 +21,10 @@ AI-agent quality is broader than checking whether a chat screen returns a `200`.
 
 ## What this demonstrates
 
-- **Agent boundaries:** an order-support agent can look up a synthetic order or prepare a non-destructive return draft.
-- **MCP tools:** `get_order` and `create_return_draft` are exposed by a local stdio MCP server.
+- **Agent boundaries:** a deterministic order-support agent can look up a synthetic order or prepare a non-destructive return draft by calling the shared tool implementation directly.
+- **MCP protocol integration:** `get_order` and `create_return_draft` are exposed by a local stdio MCP server and exercised through a real MCP client in the integration suite.
 - **API + contract testing:** Playwright API tests validate behavior and the JSON response schema with AJV.
-- **E2E testing:** Playwright tests the browser flow and visible MCP tool trace.
+- **E2E testing:** Playwright tests the browser flow and visible deterministic tool-call trace.
 - **Evals:** a versioned JSONL golden set validates tool selection, useful behavior, prompt-injection refusal, and synthetic PII handling.
 - **Safety by design:** no payment/refund execution, no real PII, no real order/customer data, and no API keys in source control.
 
@@ -33,12 +33,12 @@ This is a portfolio lab, not a production framework. The default agent is a dete
 ## Architecture
 
 ```text
-Browser UI ──POST /api/chat──> SupportAgent ──> SupportTools
-                                      │              │
-                                      │              └── synthetic dataset only
-                                      └── same contracts exposed by MCP server
+Browser UI ──POST /api/chat──> deterministic SupportAgent ──direct call──> SupportTools
+                                                                          │
+MCP integration test ──MCP client──stdio──> MCP server ────────────────────┤
+                                                                          └── synthetic dataset only
 
-Claude demo (optional) ──> MCP client ──stdio──> MCP server ──> SupportTools
+Claude demo (optional) ────────────────MCP client──stdio──> MCP server ────┘
 ```
 
 The deterministic agent is a **test double**, not a claim that LLM behavior is deterministic. In a production project, run semantic evals against a pinned model and report relevance, faithfulness, safety, latency, and cost separately.
@@ -46,7 +46,7 @@ The deterministic agent is a **test double**, not a claim that LLM behavior is d
 ## Quick start
 
 ```bash
-npm install
+npm ci
 npx playwright install chromium
 npm test
 npm run dev
@@ -86,12 +86,13 @@ The script starts the local MCP server as a child process, discovers its tools, 
 | --- | --- | --- |
 | Unit | `npm run test:unit` | agent guardrails and tool selection |
 | Eval | `npm run test:eval` | golden behavior and safety regression |
+| MCP integration | `npm run test:mcp` | real stdio discovery, tool execution, human-approval metadata, input validation, and unknown-order errors |
 | API | `npm run test:api` | API behavior and AJV response contract |
-| E2E | `npm run test:e2e` | browser journey, visible answer, and tool trace |
+| E2E | `npm run test:e2e` | browser journey, visible answer, and deterministic tool-call trace |
 
-Run `npm test` to execute type-checking and all four test layers.
+Run `npm test` to execute type-checking and all five test layers.
 
-
+The web demo intentionally calls the shared tool implementation directly to keep its deterministic test path lightweight. Its visible tool-call trace is application metadata, not MCP transport traffic. The MCP integration suite separately starts the stdio server and verifies discovery and execution through the protocol.
 
 ## References
 

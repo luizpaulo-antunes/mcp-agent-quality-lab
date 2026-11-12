@@ -5,7 +5,7 @@ import chatResponseSchema from '../../contracts/chat-response.schema.json' with 
 
 const validateChatResponse = new Ajv2020({ strict: false }).compile(chatResponseSchema);
 
-test('POST /api/chat returns a valid agent response contract and MCP tool trace', async ({ request }) => {
+test('POST /api/chat returns a valid agent response contract and deterministic tool-call trace', async ({ request }) => {
   const response = await request.post('/api/chat', { data: { message: 'Check ORD-1001' } });
   const body = await response.json();
 
