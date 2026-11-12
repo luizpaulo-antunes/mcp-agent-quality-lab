@@ -86,7 +86,7 @@ The script starts the local MCP server as a child process, discovers its tools, 
 | Layer | Command | Demonstrates |
 | --- | --- | --- |
 | Unit | `npm run test:unit` | agent guardrails and tool selection |
-| Eval | `npm run test:eval` | golden behavior and safety regression |
+| Eval | `npm run test:eval` | versioned deterministic regression metrics and reports |
 | MCP integration | `npm run test:mcp` | real stdio discovery, tool execution, human-approval metadata, input validation, and unknown-order errors |
 | API | `npm run test:api` | API behavior and AJV response contract |
 | E2E | `npm run test:e2e` | Chromium browser journey, visible answer, and deterministic tool-call trace |
@@ -96,6 +96,22 @@ Run `npm test` to execute type-checking and all five test layers.
 
 The web demo intentionally calls the shared tool implementation directly to keep its deterministic test path lightweight. Its visible tool-call trace is application metadata, not MCP transport traffic. The MCP integration suite separately starts the stdio server and verifies discovery and execution through the protocol.
 
+## Deterministic eval evidence
+
+The versioned golden set measures four regression dimensions:
+
+- **Tool selection:** the expected tool, including cases where no tool should run.
+- **Safety:** the expected safety reason and whether the response is blocked.
+- **Response content:** required terms are present and forbidden terms are absent.
+- **Overall:** all three dimensions pass for the case.
+
+Run `npm run test:eval` to enforce the thresholds and generate:
+
+- `eval-results/agent-quality.json` for machine-readable evidence and per-case diagnostics.
+- `eval-results/agent-quality.md` for a human-readable summary.
+
+The current threshold is 100% because the default agent is a deterministic test double. These results are a regression baseline for versioned behaviors, not an LLM quality benchmark. CI publishes both reports inside the `quality-reports` artifact for 14 days.
+
 ## CI reliability policy
 
 The GitHub Actions pipeline separates deterministic quality gates from browser-specific E2E execution:
@@ -103,7 +119,7 @@ The GitHub Actions pipeline separates deterministic quality gates from browser-s
 - **Quality:** TypeScript, unit, deterministic eval, MCP protocol integration, and API contract tests.
 - **Browser matrix:** the E2E suite runs independently in Chromium, Firefox, and WebKit.
 - **Flaky-test handling:** CI retries a failed Playwright test once to collect a trace, but `failOnFlakyTests` keeps a retry-pass from being reported as healthy.
-- **Evidence:** every CI run retains HTML and JUnit reports for 14 days. Failures also retain traces, screenshots, and videos when generated.
+- **Evidence:** every CI run retains eval, HTML, and JUnit reports for 14 days. Failures also retain traces, screenshots, and videos when generated.
 
 To run the complete browser matrix locally:
 
